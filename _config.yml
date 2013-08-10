@@ -1,0 +1,6 @@
+name: Ray Morgan
+markdown: redcarpet
+pygments: true
+safe: true
+lsi: false
+permalink: /:year-:month-:day-:title.html
