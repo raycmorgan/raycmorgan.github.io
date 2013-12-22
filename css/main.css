@@ -75,6 +75,9 @@ p {
 p:last-child {
     margin:0;
 }
+#masthead {
+    margin-bottom:1.6em;
+}
 #wrapper hr {
     width: 100%;
     margin: 3em auto;
