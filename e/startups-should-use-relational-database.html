@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+  </head>
+
+  <body>
+    <header id="masthead">
+      <br />
+      <p>
+        My name is <strong>Ray Morgan</strong>.
+        These are some of my thoughts on startups and technology.
+        <!-- <br /> -->
+        <a href="https://github.com/raycmorgan">Github</a> &middot;
+        <a href="https://twitter.com/raycmorgan">Twitter</a> &middot;
+        <a href="https://angel.co/raycmorgan">Angel List</a>
+      </p>
+    </header>
+
+    <hr>
+
+    <h1>Startups should use a relational database</h1>
+
+    <p>One of the main goals of a startup is to find a market with a problem and to create a solution that solves that problem. This is a hard process. A lot of your time will be spent learning about your (potential) customers. Once you have discovered a market need, the next thing to do is create the simplest solution that solves that problem. This is when you must make some simple yet important decisions about your early development process. Where are you going to host, what languages will you use, etc. One of the more important decisions you will make is what database you will use.</p>
+
+    <p>In a startup, technical decisions must be made quickly. The right technology choices will not mean success, and conversely will not lead to failure. What these choices will lead to however, is speed at which you can validate your hypothesize. So select a hosting provider that allows you to not worry about infrastructure. Go with a programming language that you know, and suits your problem well. Use a database that will allow you to ask it questions about the data &mdash; questions that you don&#8217;t even know you will have.</p>
+
+    <p>There are a lot of databases to choose from now a days. There seems to be a NoSQL database popping up daily that promises to solve all your needs, scale indefinitely and help you get a six pack. The trouble is, database are hard. Very hard. In addition to simply being hard to develop, there are always strong trade-offs that have to be made when architecting a database. If you want to learn more about some of these high impact trade-offs, I suggest you google &#8220;CAP theorem&#8221;.</p>
+
+    <p>So what does &#8220;databases are hard&#8221; and the startups choice of their primary database have to do with each other? It comes down to a few things: trust, knowledge and query-ability.</p>
+
+    <p>After you have discovered a market need and implemented your initial prototype (MVP), your database will become increasingly important for one thing: validating hypothesize. Using specialized analytics is a must. I suggest implementing Segment.io, and piping data to a couple unique providers. But no matter what, there will always be some questions that you just won&#8217;t be able to answer with those platforms. It might be due to the fact you forgot to log an event. Or the way you log it doesn&#8217;t allow you to get the answer you are looking for. Or say you are an ecommerce platform and want to know how long a specific type of inventory takes before it sells, taking into account returns.</p>
+
+    <p>At some point, you will need to ask your primary database questions. If you chose the wrong database, this is where things get tricky. This is why I suggest startups should use a relational database. Relational databases are fundamentally developed around this problem. It means less mucking around with crazy map/reduce queries and more time spent solving problems and getting answers.</p>
+
+    <h3>NoSQL or Relational</h3>
+
+    <p>There are two primary reasons I feel that developers are using NoSQL over the traditional relational database. Development speed and scalability. Let&#8217;s tackle the latter first: You can scale (or put off scaling) a relational database pretty easily. And honestly, let&#8217;s not prematurely optimize something as critical as your primary database for a future hope of scale. There are far better ways to prepare for that need, which is a different discussion completely.</p>
+
+    <p>Development speed is a trickier subject. First if this is your concern I assume you are thinking about schemaless document stores (MongoDB, CouchDB, etc), because most other NoSQL flavors don&#8217;t optimize for development speed. So I am going to focus on that class of NoSQL databases for this topic.</p>
+
+    <h3>Schemaless</h3>
+
+    <p>The idea that you don&#8217;t need to predetermine the shape of your data beforehand. It sounds great, you have a document (JSON) and you just store it. No worrying about schemas or migrations. Except in reality, there is still a schema. All that has happened is we&#8217;ve moved from an explicit schema in the database, to an implicit schema in the application layer.</p>
+
+    <p>Like-wise, migrations still exist. You will still come to a point in time where you want to, for example, take the <code>name</code> field of all your user documents and split them into first and last name fields. Or you want to start a new field but want a default value, so you either need to handle the default in the application, or add the default value to all the existing documents. In practice, only the simplest of migrations are no longer needed: adding new null columns and creating new tables. All the while moving work onto the developers to standardize how they handle different migration cases.</p>
+
+    <h3>Related data</h3>
+
+    <p>In document stores, you have two choices: store related data as sub-documents, or store related data as separate documents with references. It is up to the developers to understand the trade-offs of both approaches. Selecting one over the other can lead to performance gains or issues, scalability issues and above all, make asking certain questions of the data a lot harder.</p>
+
+    <p>In the relational world, there are known patterns of how to model this data. Due to this, in most cases if your startup is using a relational database, you will be using some notion of an ORM at the application level. Any decent ORM these days will hide all the nitty gritty of relations behind a nice object wrapper. ORMs usually have some performance trade-offs, but again, any decent one will preform typical use cases very well. They won&#8217;t be a limiting factor in your scalability any time soon.</p>
+
+    <h3>Transactions</h3>
+
+    <p>One of the many trade-offs that most NoSQL databases take, is some form of horizontal scalability over transactions. Transactions can be very expensive performance-wise, and do not scale well. Usually there are ways to break a problem down to where large transactions are no longer needed. But that takes much more forethought and is dependent on a particular problem. Transactions simplify the application level. Since you want to be able to focus on the market solution rather than infrastructure early on, having transactions at the cost of scalability is greatly beneficial.</p>
+
+    <h3>Final thoughts</h3>
+
+    <p>With modern day ORMs and migration tools, the actual development speedup from a document database v. relational database is negligible. I would argue that relational databases in practice will increase overall efficiency due to tooling, libraries and features such as transactions.</p>
+
+    <p>Most importantly, relational databases allow you to ask your data questions that you don&#8217;t yet know. When your goal as a startup is to optimize for the speed at which you can learn, that is the crucial part of the database you chose.</p>
+
+    <p>As an early startup, your goal is to optimize for the speed at which you can learn. Therefore, the most important parts of choosing a database are that it helps you iterate fast; and can handle complex questions about your data. Even questions you don&#8217;t yet know.</p>
+
+    <hr>
+
+    <h4>Specialized databases</h4>
+
+    <p>I mainly focused on relational databases v. documents databases. There are many other stores out there that are great for specific things. Redis is great for caching and maintaining complex secondary indexes. Riak is great when your core value proposition revolves around high availability. Elastic Search/Solr is great for full text searching.</p>
+
+    <p>Remember that with databases especially, there are always trade-offs. Your role when selecting a database for your startup is making sure that those are the right trade-offs for your company.</p>
+
+    <br><br><br>
+  </body>
+</html>
